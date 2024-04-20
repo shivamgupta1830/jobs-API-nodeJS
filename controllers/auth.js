@@ -10,7 +10,9 @@ const register = async (req, res) => {
       .status(StatusCodes.CREATED)
       .json({ success: true, user: { name: user.name }, token });
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: error });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "Internal server error" });
   }
 };
 
@@ -27,7 +29,7 @@ const login = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      res.status(StatusCodes.UNAUTHORIZED).json({ msg: "User not found!" });
+      res.status(StatusCodes.NOT_FOUND).json({ msg: "User not found!" });
     }
 
     const isPasswordCorrect = await user.comparePassword(password);
@@ -40,7 +42,9 @@ const login = async (req, res) => {
     const token = user.createJWT();
     res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: error });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "Internal server error" });
   }
 };
 
